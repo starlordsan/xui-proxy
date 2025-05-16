@@ -1,5 +1,5 @@
 {
-  "name": "xui-proxy-rotativo",
+  "name": "lb-proxy",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -8,6 +8,6 @@
   "dependencies": {
     "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.6",
-    "https-proxy-agent": "^7.0.1"
+    "https-proxy-agent": "^7.0.4"
   }
 }
