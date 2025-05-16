@@ -5,7 +5,7 @@ const { HttpsProxyAgent } = require("https-proxy-agent");
 const app = express();
 
 // IP real do seu painel IPTV
-const target = "http://194.140.198.241:80";
+const target = "http://54.39.98.217:80";
 
 // Lista de proxies IPRoyal
 const proxyList = [
