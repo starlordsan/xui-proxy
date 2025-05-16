@@ -1,11 +1,13 @@
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const HttpsProxyAgent = require("https-proxy-agent");
+const { HttpsProxyAgent } = require("https-proxy-agent");
 
-// IP real do painel IPTV
+const app = express();
+
+// IP real do seu painel IPTV
 const target = "http://194.140.198.241:80";
 
-// Lista de proxies IPRoyal (formato: http://user:pass@ip:port)
+// Lista de proxies IPRoyal com autenticação
 const proxyList = [
   "http://14a524eab7130:6c60b71cdb@85.209.123.226:12323",
   "http://14a524eab7130:6c60b71cdb@136.175.224.19:12323",
@@ -15,13 +17,11 @@ const proxyList = [
   "http://14a524eab7130:6c60b71cdb@163.5.146.7:12323"
 ];
 
-// Função para escolher proxy aleatório
+// Função para escolher um proxy aleatório
 function getRandomProxy() {
   const index = Math.floor(Math.random() * proxyList.length);
   return proxyList[index];
 }
-
-const app = express();
 
 app.use(
   "/",
@@ -29,12 +29,14 @@ app.use(
     const proxyUrl = getRandomProxy();
     const agent = new HttpsProxyAgent(proxyUrl);
 
+    console.log("➡️ Usando proxy:", proxyUrl);
+
     createProxyMiddleware({
       target,
       changeOrigin: true,
       pathRewrite: (path) => path,
-      agent, // Roteia a requisição HTTP via proxy
-      onProxyReq(proxyReq, req, res) {
+      agent,
+      onProxyReq(proxyReq) {
         proxyReq.removeHeader("referer");
         proxyReq.removeHeader("origin");
       },
