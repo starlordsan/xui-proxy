@@ -11,10 +11,7 @@ const target = "http://194.140.198.241:80";
 const proxyList = [
   "http://14a524eab7130:6c60b71cdb@85.209.123.226:12323",
   "http://14a524eab7130:6c60b71cdb@136.175.224.19:12323",
-  "http://14a524eab7130:6c60b71cdb@163.5.103.135:12323",
-  "http://14a524eab7130:6c60b71cdb@191.101.246.254:12323",
-  "http://14a524eab7130:6c60b71cdb@185.238.142.81:12323",
-  "http://14a524eab7130:6c60b71cdb@163.5.146.7:12323"
+  "http://14a524eab7130:6c60b71cdb@163.5.103.135:12323"
 ];
 
 // Função para escolher proxy aleatório
