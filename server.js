@@ -3,10 +3,10 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 
-// Painel real
+// IP real do seu painel XUI.one
 const target = "http://194.140.198.241:80";
 
-// Proxy todas as rotas
+// Middleware de proxy reverso
 app.use(
   "/",
   createProxyMiddleware({
@@ -14,14 +14,19 @@ app.use(
     changeOrigin: true,
     pathRewrite: (path) => path, // mantém subpastas
     onProxyReq(proxyReq, req, res) {
-      // opcional: remova headers que revelem a origem
+      // Remove cabeçalhos que possam identificar o origin
       proxyReq.removeHeader("referer");
       proxyReq.removeHeader("origin");
     },
+    onError(err, req, res) {
+      console.error("❌ Erro ao conectar ao painel IPTV:", err.message);
+      res.status(502).send("Erro 502: Não foi possível conectar ao painel IPTV.");
+    }
   })
 );
 
+// Inicializa servidor
 const port = process.env.PORT || 10000;
 app.listen(port, () => {
-  console.log(`Proxy rodando na porta ${port}`);
+  console.log(`✅ Proxy reverso ativo na porta ${port}`);
 });
