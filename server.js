@@ -7,7 +7,7 @@ const app = express();
 // IP real do seu painel IPTV
 const target = "http://194.140.198.241:80";
 
-// Lista de proxies IPRoyal com autenticação
+// Lista de proxies IPRoyal
 const proxyList = [
   "http://14a524eab7130:6c60b71cdb@85.209.123.226:12323",
   "http://14a524eab7130:6c60b71cdb@136.175.224.19:12323",
@@ -17,7 +17,7 @@ const proxyList = [
   "http://14a524eab7130:6c60b71cdb@163.5.146.7:12323"
 ];
 
-// Função para escolher um proxy aleatório
+// Escolhe um proxy aleatório da lista
 function getRandomProxy() {
   const index = Math.floor(Math.random() * proxyList.length);
   return proxyList[index];
@@ -31,20 +31,24 @@ app.use(
 
     console.log("➡️ Usando proxy:", proxyUrl);
 
-    createProxyMiddleware({
+    const proxy = createProxyMiddleware({
       target,
       changeOrigin: true,
       pathRewrite: (path) => path,
       agent,
       onProxyReq(proxyReq) {
-        proxyReq.removeHeader("referer");
-        proxyReq.removeHeader("origin");
+        proxyReq.setHeader("referer", "");
+        proxyReq.setHeader("origin", "");
       },
       onError(err, req, res) {
         console.error("❌ Erro de proxy:", err.message);
-        res.status(502).send("Erro 502: Falha ao conectar usando proxy.");
+        if (!res.headersSent) {
+          res.status(502).send("Erro 502: Falha ao conectar usando proxy.");
+        }
       },
-    })(req, res, next);
+    });
+
+    proxy(req, res, next);
   }
 );
 
