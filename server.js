@@ -17,7 +17,7 @@ const proxyList = [
   "http://14a524eab7130:6c60b71cdb@163.5.146.7:12323"
 ];
 
-// Escolhe um proxy aleatório da lista
+// Função para escolher proxy aleatório
 function getRandomProxy() {
   const index = Math.floor(Math.random() * proxyList.length);
   return proxyList[index];
@@ -36,10 +36,6 @@ app.use(
       changeOrigin: true,
       pathRewrite: (path) => path,
       agent,
-      onProxyReq(proxyReq) {
-        proxyReq.setHeader("referer", "");
-        proxyReq.setHeader("origin", "");
-      },
       onError(err, req, res) {
         console.error("❌ Erro de proxy:", err.message);
         if (!res.headersSent) {
